@@ -1,0 +1,68 @@
+﻿<!-- HTML form to create a new department -->
+<!-- HTML form to create a new department -->
+<form id="createDepartmentForm">
+    <div class="form-group">
+        <label for="departmentName">Department Name:</label>
+        <input type="text" id="departmentName" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="employeesTotal">Total Employees:</label>
+        <input type="number" id="employeesTotal" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success">Create Department</button>
+</form>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Handle form submission
+            $('#createDepartmentForm').submit(function (event) {
+                event.preventDefault();  // Prevent the form from submitting the default way
+
+                // Gather data from the form fields
+                var deptData = {
+                    departmentName: $('#departmentName').val(),     // Required field
+                    employeesTotal: $('#employeesTotal').val() || null,  // Optional field, handle as nullable
+                    location: $('#location').val() || null          // Optional field, handle as nullable
+                };
+                h/
+                // Send the data to the server via AJAX POST request
+                $.ajax({
+                    url: 'https://localhost:7017/api/Department',   // The API endpoint for creating a department
+                    type: 'POST',                                  // HTTP method for creating a new resource
+                    contentType: 'application/json',               // Data type being sent
+                    data: JSON.stringify(deptData),                // Convert JS object to JSON string
+                    success: function (response) {
+                        console.log(response);  // Log the response for debugging
+                        alert('Department created successfully!');
+
+                        // Optionally, clear the form fields after successful creation
+                        $('#departmentName').val('');
+                        $('#employeesTotal').val('');
+                        $('#location').val('');
+
+                        // Optionally, refresh or reload the department list (if available)
+                        loadDepartments(); // Call a function that loads the department data again
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error creating department: ", xhr.responseText || error);  // Log more detailed error
+                        alert('An error occurred while creating the department.');
+                    }
+                });
+            });
+
+            // Optional: Function to reload the department list after a new entry is created
+            function loadDepartments() {
+                // Logic to reload department list (e.g., calling the AJAX GET code you already have)
+                // You can reuse the code from your GetData jQuery logic
+            }
+        });
+    </script>
+
+
+}
